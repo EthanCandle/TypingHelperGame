@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class TypingManager : MonoBehaviour
 {
-   // public GameManager gm;
-
+    // public GameManager gm;
+    public InputAcceptor inputAcceptorScript;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,4 +17,10 @@ public class TypingManager : MonoBehaviour
     {
         
     }
+
+    public void CallAutoComplete()
+    {
+        inputAcceptorScript.CallAutoComplete();
+    }
+
 }

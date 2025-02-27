@@ -128,6 +128,7 @@ public class InputAcceptor : MonoBehaviour
         shouldAcceptInput = true;
     }
 
+    #region powerUpCallFunctions
     // these three are the powerups the player can call/called when player loses
     public void CallAutoComplete()
     {
@@ -149,7 +150,7 @@ public class InputAcceptor : MonoBehaviour
         // this one adds the next character needed, used if they don't know where | is
         AddSingleCharacterToInputText();
     }
-
+    #endregion powerUpCallFunctions
 
     // returns true if we are in the AcceptingInput phase, else false
     bool CheckIfAllowingInput()
@@ -196,7 +197,7 @@ public class InputAcceptor : MonoBehaviour
     }
 
 
-
+    #region PowerUpAutoComplete
     // removes all wrong charactersa and fills in the rest
     // returns whether or not it was able to complete it
     public void AutoComplete()
@@ -225,7 +226,9 @@ public class InputAcceptor : MonoBehaviour
         yield return new WaitForSeconds(timeDelay);
         RemoveAllWrongCharacters();
     }
+    #endregion PowerUpAutoComplete
 
+    #region PowerUpAddCharacter
     // this fill in the remaining text even if the current characters are wrong
     public float FillInText()
     {
@@ -283,6 +286,7 @@ public class InputAcceptor : MonoBehaviour
 
         }
     }
+    #endregion PowerUpAddCharacter
 
     #region RemoveAllWrongCharactersLogic
     public float RemoveAllWrongCharacters()
@@ -353,7 +357,6 @@ public class InputAcceptor : MonoBehaviour
     public void StartGame()
     {
         ChangeWord(ref startingWord);
-
     }
 
     void SetColor()
@@ -363,6 +366,7 @@ public class InputAcceptor : MonoBehaviour
         colorWordOutOfBoundsString = colorWordOutOfBounds.GetHashCode().ToString();
     }
 
+    #region ArrowInputs
     void HandleArrowInputs()
     {
         HandleLeftArrowInput();
@@ -552,7 +556,7 @@ public class InputAcceptor : MonoBehaviour
         }
     }
 
-
+    #endregion ArrowInputs
 
     void HandleInputLogic()
     {
@@ -842,7 +846,6 @@ public class InputAcceptor : MonoBehaviour
 
     public void WordsAreSame()
     {
-
         shouldAcceptInput = false;
         print("Found");
     }
@@ -853,8 +856,6 @@ public class InputAcceptor : MonoBehaviour
         hiddenInputText.text = currentText + ' ';
         SetHorizontalPosition();
         UpdateCaretPositionToSpecificCharacter();
-
-
     }
 
     void UpdateCaretPosition()
@@ -1004,6 +1005,37 @@ public class InputAcceptor : MonoBehaviour
         UpdateCaretPositionToSpecificCharacter();
     }
 
+
+
+    // has to account for the tab stops
+    // a    a tabs stop at certain places, a set amount of spaces
+    //aaaa  a
+    int CountTabs(string text)
+    {
+        int currentTabStopSpacing = 3;
+        int tabCount = 0;
+        foreach (char c in text)
+        {
+            if (c == '\t')
+            {
+                tabCount += currentTabStopSpacing;
+                currentTabStopSpacing = 3;
+            }
+            else
+            {
+                currentTabStopSpacing--;
+            }
+
+            // resets after dropping below 0
+            if (currentTabStopSpacing < 0)
+            {
+                currentTabStopSpacing = 3;
+            }
+        }
+
+        return tabCount;
+    }
+
     void MoveCaretUp()
     {
         // Safeguard if there are no characters to move up from
@@ -1117,37 +1149,6 @@ public class InputAcceptor : MonoBehaviour
         // Update caret position
         UpdateCaretPositionToSpecificCharacter();
     }
-
-    // has to account for the tab stops
-    // a    a tabs stop at certain places, a set amount of spaces
-    //aaaa  a
-    int CountTabs(string text)
-    {
-        int currentTabStopSpacing = 3;
-        int tabCount = 0;
-        foreach (char c in text)
-        {
-            if (c == '\t')
-            {
-                tabCount += currentTabStopSpacing;
-                currentTabStopSpacing = 3;
-            }
-            else
-            {
-                currentTabStopSpacing--;
-            }
-
-            // resets after dropping below 0
-            if (currentTabStopSpacing < 0)
-            {
-                currentTabStopSpacing = 3;
-            }
-        }
-
-        return tabCount;
-    }
-
-
 
     void MoveCaretDown()
     {
