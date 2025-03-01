@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEditor;
+using System;
 public enum PhaseIn { AcceptingInput, Occupied }
 public class InputAcceptor : MonoBehaviour
 {
@@ -32,7 +33,8 @@ public class InputAcceptor : MonoBehaviour
       * 
       */
 
-
+    public static InputAcceptor current; // reference to script, called by InputAcceptor.current
+    public event Action GotCorrectWord;
 
     // the toggle for whether the player can type with it
     [Tooltip("Should this input manager be allowed to accept inputs?")]
@@ -104,27 +106,45 @@ public class InputAcceptor : MonoBehaviour
     // size fitter of the shown text
     public ContentSizeFitter sizeFitter;
 
-
+    private void Awake()
+    {
+        current = this;
+    }
     public void Start()
     {
-        SetTargetWord(startingWord);
+       // SetTargetWord(startingWord);
     }
 
     // called to change the word to a differnt one/give it once in the first place
     public void SetTargetWord(string targetWord)
     {
+        print("In set target word");
         ChangeWord(ref targetWord);
+    }
+
+    public void ChangeInputState(bool stateToChangeTo)
+    {
+        if (stateToChangeTo)
+        {
+            ActivateInput();
+        }
+        else
+        {
+            DeactivateInput();
+        }
     }
 
     // used to remove the player from inpputing into this, IE: pause menu
     public void DeactivateInput()
     {
+        print("deactive input");
         shouldAcceptInput = false;
     }
 
     // used to activate/reactive the input, IE: unpausing, starting the game, becoming the target enemy
     public void ActivateInput()
     {
+        print("activeate input");
         shouldAcceptInput = true;
     }
 
@@ -155,6 +175,7 @@ public class InputAcceptor : MonoBehaviour
     // returns true if we are in the AcceptingInput phase, else false
     bool CheckIfAllowingInput()
     {
+        // this is only used by the script itself with powerups
         if (currentPhaseIn != PhaseIn.AcceptingInput)
         {
             return false;
@@ -163,6 +184,32 @@ public class InputAcceptor : MonoBehaviour
         {
             return true;
         }
+    }
+
+    // called when pressing enter if after a letter is inputted?
+    public bool CheckIfWordsAreSame()
+    {
+        if (currentText == targetWord && shouldAcceptInput)
+        {
+            print("Checking if words are the same");
+            print(shouldAcceptInput);
+            WordsAreSame();
+            return true;
+        }
+        else
+        {
+            //print($"Incorrect: First word: \"{currentText}\", Second word: \"{targetWord}\"");
+            return false;
+        }
+    }
+
+    public void WordsAreSame()
+    {
+        print($"Incorrect: First word: \"{currentText}\", Second word: \"{targetWord}\"");
+        DeactivateInput();
+        GotCorrectWord(); // action event to call things listening in for this
+
+        print("Found");
     }
 
     // to be called whenever you want to start accpeting inputs
@@ -816,38 +863,13 @@ public class InputAcceptor : MonoBehaviour
 
         // updates the word
         targetWord = shownText.text = wordToChangeTo;
-
+        print($"Target word: {targetWord}ShownText is now: {shownText.text}");
         characterLimit = targetWord.Length * 2;
 
         // updates the rects so the word fits and can be typed correctly
         FormatContentSizeFitter();
         // updates the caret on the input text so it starts at the first letter again
         UpdateText();
-    }
-
-    // called when pressing enter if after a letter is inputted?
-    public bool CheckIfWordsAreSame()
-    {
-        if (currentText == targetWord && shouldAcceptInput)
-        {
-            print("Checking if words are the same");
-            shouldAcceptInput = false;
-            print(shouldAcceptInput);
-            WordsAreSame();
-            shouldAcceptInput = false;
-            return true;
-        }
-        else
-        {
-            //print($"Incorrect: First word: \"{currentText}\", Second word: \"{targetWord}\"");
-            return false;
-        }
-    }
-
-    public void WordsAreSame()
-    {
-        shouldAcceptInput = false;
-        print("Found");
     }
 
     // called after text is changed 
