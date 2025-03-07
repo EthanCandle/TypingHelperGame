@@ -12,10 +12,10 @@ public class GameManager : MonoBehaviour
     public int scoreCurrent = 0;
 
     private bool waitFrame = true;
-    private void Awake()
+    void Awake()
     {
         current = this;
-  }
+    }
 
     void Start()
     {
