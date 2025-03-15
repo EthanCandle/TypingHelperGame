@@ -13,17 +13,4 @@ MonoBehaviour:
   m_Name: WordBank TestLetters
   m_EditorClassIdentifier: 
   words:
-  - ~
-  - +
-  - =
-  - '-'
-  - '{'
-  - '}'
-  - '['
-  - ']'
-  - \
-  - '|'
-  - ;
-  - ':'
-  - ''''
-  - '"'
+  - 1234567890\n!@#$%^&*()\nqwertyuiop\nasdfghjkl\nzxcvbnm\n-=+[]{}\|;:'",<.>/?_~`

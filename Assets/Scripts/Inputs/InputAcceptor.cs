@@ -38,7 +38,7 @@ public class InputAcceptor : MonoBehaviour
 
     // the toggle for whether the player can type with it
     [Tooltip("Should this input manager be allowed to accept inputs?")]
-    public bool shouldAcceptInput = true;
+    public bool shouldAcceptInput = false;
 
     // the enum for whether the player can use bonuses
     public PhaseIn currentPhaseIn = PhaseIn.AcceptingInput;

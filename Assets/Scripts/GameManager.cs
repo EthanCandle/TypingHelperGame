@@ -4,12 +4,17 @@ using UnityEngine;
 using System;
 public class GameManager : MonoBehaviour
 {
+
+    public int columnOn = 0, columnTotal = 3;
+
     public static GameManager current;
     // need to make this script listen to the InputAcceptor and see when it
     // gets the correct word in order to call it
-    // Start is called before the first frame update
+
+
     // public GameManager gm; gm = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
     public int scoreCurrent = 0;
+    public EnemySpawner enemySpawnerScript;
 
     private bool waitFrame = true;
     void Awake()
@@ -20,26 +25,35 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         InputAcceptor.current.GotCorrectWord += CorrectWord; // makes it so the Gamemanager will call the function when the InputAcceptor gets the right word
-
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (waitFrame)
+
+        if (Input.GetKeyDown(KeyCode.LeftControl))
         {
-            waitFrame = false;
-            if (OnCorrectWord != null)
-            {
-                foreach (var d in OnCorrectWord.GetInvocationList())
-                {
-                    Debug.Log($"Listener: {d.Method.Name} in {d.Target}");
-                }
-            }
-            OnCorrectWord(scoreCurrent);
-            print("waied frame");
+            MoveIncrementColumnOn();
         }
     }
+
+    public int GetColumnOn()
+    {
+        return columnOn;
+    }
+
+    public void MoveIncrementColumnOn()
+    {
+        columnOn++;
+
+        if(columnOn > columnTotal - 1)
+        {
+            columnOn = 0;
+        }
+        enemySpawnerScript.GetAndSetClosestEnemy();
+
+    }
+
 
     public event Action<int> OnCorrectWord;
     public void CorrectWord()
