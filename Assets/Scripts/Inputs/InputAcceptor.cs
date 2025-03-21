@@ -118,7 +118,7 @@ public class InputAcceptor : MonoBehaviour
     // called to change the word to a differnt one/give it once in the first place
     public void SetTargetWord(string targetWord)
     {
-        print("In set target word");
+       // print("In set target word");
         ChangeWord(ref targetWord);
     }
 
@@ -137,14 +137,14 @@ public class InputAcceptor : MonoBehaviour
     // used to remove the player from inpputing into this, IE: pause menu
     public void DeactivateInput()
     {
-        print("deactive input");
+        //print("deactive input");
         shouldAcceptInput = false;
     }
 
     // used to activate/reactive the input, IE: unpausing, starting the game, becoming the target enemy
     public void ActivateInput()
     {
-        print("activeate input");
+        //print("activeate input");
         shouldAcceptInput = true;
     }
 
@@ -863,7 +863,7 @@ public class InputAcceptor : MonoBehaviour
 
         // updates the word
         targetWord = shownText.text = wordToChangeTo;
-        print($"Target word: {targetWord}ShownText is now: {shownText.text}");
+        //print($"Target word: {targetWord}ShownText is now: {shownText.text}");
         characterLimit = targetWord.Length * 2;
 
         // updates the rects so the word fits and can be typed correctly
@@ -981,7 +981,7 @@ public class InputAcceptor : MonoBehaviour
         {
             return;
         }
-        print($"{hiddenInputText.text}, {hiddenInputText.text.Length}, {characterOn}");
+       // print($"{hiddenInputText.text}, {hiddenInputText.text.Length}, {characterOn}");
         // Ensure the text mesh is fully updated
         hiddenInputText.ForceMeshUpdate();
         TMP_TextInfo textInfo = hiddenInputText.textInfo;
@@ -992,7 +992,7 @@ public class InputAcceptor : MonoBehaviour
         // Get the TMP_LineInfo for the current and above lines
         TMP_LineInfo currentLineInfo = textInfo.lineInfo[lineNumber];
         int e = CountTabs(hiddenInputText.text.Substring(currentLineInfo.firstCharacterIndex, characterOn - currentLineInfo.firstCharacterIndex));
-        print($"Set hori:{e}");
+       // print($"Set hori:{e}");
         horizontalCharacterOnRemember = characterOn - currentLineInfo.firstCharacterIndex + e;
 
     }

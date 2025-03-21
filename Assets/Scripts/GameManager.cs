@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 public class GameManager : MonoBehaviour
 {
-
+    public int levelOn = 0;
     public int columnOn = 0, columnTotal = 3;
 
     public static GameManager current;
@@ -14,17 +14,21 @@ public class GameManager : MonoBehaviour
 
     // public GameManager gm; gm = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
     public int scoreCurrent = 0;
-    public EnemySpawner enemySpawnerScript;
+    public EnemySpawner enemySpawnerScript; //        enemySpawnerScript = GameObject.FindGameObjectWithTag("GameManager").GetComponent<EnemySpawner>();
+
 
     private bool waitFrame = true;
     void Awake()
     {
         current = this;
+
+        enemySpawnerScript = GameObject.FindGameObjectWithTag("GameManager").GetComponent<EnemySpawner>();
+
     }
 
     void Start()
     {
-        InputAcceptor.current.GotCorrectWord += CorrectWord; // makes it so the Gamemanager will call the function when the InputAcceptor gets the right word
+       // InputAcceptor.current.GotCorrectWord += CorrectWord; // makes it so the Gamemanager will call the function when the InputAcceptor gets the right word
     }
 
     // Update is called once per frame
@@ -71,7 +75,7 @@ public class GameManager : MonoBehaviour
     private void OnDestroy()
     {
         OnCorrectWord = null; // removes all listeners
-        InputAcceptor.current.GotCorrectWord -= CorrectWord; // makes it so the Gamemanager will call the function when the InputAcceptor gets the right word
+       // InputAcceptor.current.GotCorrectWord -= CorrectWord; // makes it so the Gamemanager will call the function when the InputAcceptor gets the right word
     }
 
 }
